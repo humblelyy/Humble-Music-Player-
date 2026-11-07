@@ -1,0 +1,51 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="app.myspoti.host.android" >
+4
+5    <uses-sdk android:minSdkVersion="29" />
+5-->INJECTED
+5-->INJECTED
+6
+7    <uses-permission android:name="android.permission.INTERNET" />
+7-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:3:5-67
+7-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:3:22-64
+8    <!-- WebPlayerHost.watchNetwork: the relay's connections are dropped when the network changes. -->
+9    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+9-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:5:5-79
+9-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:5:22-76
+10    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+10-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:6:5-77
+10-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:6:22-74
+11    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+11-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:7:5-92
+11-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:7:22-89
+12    <uses-permission android:name="android.permission.WAKE_LOCK" />
+12-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:8:5-68
+12-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:8:22-65
+13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+13-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:9:5-76
+13-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:9:22-73
+14    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+14-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:10:5-77
+14-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:10:22-74
+15
+16    <application>
+16-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:11:5-20:19
+17        <service
+17-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:12:9-19:19
+18            android:name="app.myspoti.host.android.PlaybackService"
+18-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:13:13-68
+19            android:exported="true"
+19-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:14:13-36
+20            android:foregroundServiceType="mediaPlayback" >
+20-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:15:13-58
+21            <intent-filter>
+21-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:16:13-18:29
+22                <action android:name="android.media.browse.MediaBrowserService" />
+22-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:17:17-83
+22-->C:\Users\mahes\Downloads\HumbleMusic\HUMBLE-MUSIC-Source\HUMBLE-MUSIC\base\host-android\src\main\AndroidManifest.xml:17:25-80
+23            </intent-filter>
+24        </service>
+25    </application>
+26
+27</manifest>

@@ -1,0 +1,9 @@
+app.myspoti.host.android.host-android-pngs-0 C:\Users\mahes\Downloads\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\generated\res\pngs\debug
+app.myspoti.host.android.host-android-updated_navigation_xml-1 C:\Users\mahes\Downloads\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\generated\updated_navigation_xml\debug
+app.myspoti.host.android.host-android-mergeDebugResources-2 C:\Users\mahes\Downloads\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\intermediates\incremental\debug\mergeDebugResources\merged.dir
+app.myspoti.host.android.host-android-mergeDebugResources-3 C:\Users\mahes\Downloads\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+app.myspoti.host.android.host-android-debug-4 C:\Users\mahes\Downloads\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\intermediates\merged_res\debug\mergeDebugResources
+app.myspoti.host.android.host-android-debug-5 C:\Users\mahes\Downloads\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\intermediates\packaged_res\debug\packageDebugResources
+app.myspoti.host.android.host-android-debug-6 C:\Users\mahes\Downloads\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\src\debug\res
+app.myspoti.host.android.host-android-main-7 C:\Users\mahes\Downloads\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\src\main\res
+gradleHome-0 C:\Users\mahes\.gradle

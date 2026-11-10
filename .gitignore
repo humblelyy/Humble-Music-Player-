@@ -39,3 +39,17 @@ Desktop.ini
 *.log
 
 scripts/
+
+# All generated build folders
+**/build/
+
+# Release build artifacts
+/app/release/
+**/outputs/
+**/mapping.txt
+
+# Signing credentials
+*.jks
+*.keystore
+*.p12
+*.pem

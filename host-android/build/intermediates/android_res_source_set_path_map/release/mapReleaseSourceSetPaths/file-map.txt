@@ -1,9 +1,0 @@
-app.myspoti.host.android.host-android-pngs-0 C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\generated\res\pngs\release
-app.myspoti.host.android.host-android-updated_navigation_xml-1 C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\generated\updated_navigation_xml\release
-app.myspoti.host.android.host-android-mergeReleaseResources-2 C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\intermediates\incremental\release\mergeReleaseResources\merged.dir
-app.myspoti.host.android.host-android-mergeReleaseResources-3 C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\intermediates\incremental\release\mergeReleaseResources\stripped.dir
-app.myspoti.host.android.host-android-release-4 C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\intermediates\merged_res\release\mergeReleaseResources
-app.myspoti.host.android.host-android-release-5 C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\build\intermediates\packaged_res\release\packageReleaseResources
-app.myspoti.host.android.host-android-main-6 C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\src\main\res
-app.myspoti.host.android.host-android-release-7 C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android\src\release\res
-gradleHome-0 C:\Users\mahes\.gradle

@@ -1,3 +1,4 @@
+
 /*
  * Adapted from BitChord (https://github.com/kushagrasinghx/BitChord), GPL-3.0-or-later,
  * sharedUi/src/jvmSharedMain/kotlin/com/music/bitchord/ui/screens/HomeScreen.kt at edc1e6f.
@@ -5,6 +6,10 @@
  */
 package com.music.spotui.ui.immersive.screens
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -31,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -52,9 +58,13 @@ import com.music.spotui.ui.navigation.Routes
 import com.music.spotui.ui.navigation.profileRoute
 
 @Composable
-internal fun ProfileDisc(onClick: (() -> Unit)?, modifier: Modifier = Modifier) {
+internal fun ProfileDisc(
+    onClick: (() -> Unit)?,
+    modifier: Modifier = Modifier
+) {
     val avatar = ProfileCache.imageUrl
     val initial = ProfileCache.name?.trim()?.firstOrNull()?.uppercase() ?: "•"
+
     AvatarDisc(
         url = avatar,
         initial = initial,
@@ -77,7 +87,13 @@ internal fun AvatarDisc(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .size(size)
-            .let { if (onClick != null) it.immersiveClickable(onClick = onClick) else it }
+            .let {
+                if (onClick != null) {
+                    it.immersiveClickable(onClick = onClick)
+                } else {
+                    it
+                }
+            }
             .clip(CircleShape)
             .background(Immersive.Accent),
     ) {
@@ -102,7 +118,8 @@ internal fun AvatarDisc(
 }
 
 /**
- * Profile sheet: account name and picture, settings, extensions, about, support and sign-out.
+ * Profile sheet: account name and picture, settings, about,
+ * support, extensions and sign-out.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,11 +130,14 @@ internal fun ImmersiveProfileSheet(
     val name = ProfileCache.name.orEmpty()
     val avatar = ProfileCache.imageUrl
     val myId = ProfileCache.id
+    val context = LocalContext.current
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         containerColor = Immersive.Raised,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        sheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true
+        ),
     ) {
         Column(
             modifier = Modifier
@@ -126,14 +146,23 @@ internal fun ImmersiveProfileSheet(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 16.dp),
         ) {
+            // Account header
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(enabled = myId != null, role = Role.Button) {
-                        myId?.let { onOpen(profileRoute(it, name)) }
+                    .clickable(
+                        enabled = myId != null,
+                        role = Role.Button
+                    ) {
+                        myId?.let {
+                            onOpen(profileRoute(it, name))
+                        }
                     }
-                    .padding(horizontal = Immersive.Gutter, vertical = 8.dp),
+                    .padding(
+                        horizontal = Immersive.Gutter,
+                        vertical = 8.dp
+                    ),
             ) {
                 AvatarDisc(
                     url = avatar,
@@ -142,15 +171,21 @@ internal fun ImmersiveProfileSheet(
                     onClick = null,
                     size = 48.dp,
                 )
+
                 Text(
-                    text = name.ifBlank { stringResource(R.string.immersive_screens_account) },
+                    text = name.ifBlank {
+                        stringResource(R.string.immersive_screens_account)
+                    },
                     style = Immersive.Headline,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 14.dp),
                 )
+
                 if (SupportReminder.level != SupportReminder.Level.NONE) {
-                    SupporterBadge(Modifier.padding(start = 10.dp))
+                    SupporterBadge(
+                        Modifier.padding(start = 10.dp)
+                    )
                 }
             }
 
@@ -158,7 +193,10 @@ internal fun ImmersiveProfileSheet(
                 Text(
                     text = stringResource(R.string.view_profile),
                     style = Immersive.Caption,
-                    modifier = Modifier.padding(start = 82.dp, bottom = 4.dp),
+                    modifier = Modifier.padding(
+                        start = 82.dp,
+                        bottom = 4.dp
+                    ),
                 )
             }
 
@@ -167,6 +205,7 @@ internal fun ImmersiveProfileSheet(
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
+            // Settings
             SheetRow(
                 stringResource(R.string.settings_title),
                 stringResource(R.string.settings_detail)
@@ -174,8 +213,75 @@ internal fun ImmersiveProfileSheet(
                 onOpen(Routes.Settings.route)
             }
 
-            val extRegistry by com.music.spotui.extensions.Extensions.registry.collectAsState()
+            // About
+            var about by remember { mutableStateOf(false) }
+
+            if (about) {
+                AboutSheet(
+                    onDismiss = { about = false }
+                )
+            }
+
+            SheetRow(
+                stringResource(R.string.creator_biography_section_title),
+                stringResource(R.string.about_detail)
+            ) {
+                about = true
+            }
+
+            // Support HUMBLE MUSIC
+            SheetRow(
+                title = "Support HUMBLE MUSIC",
+                detail = "Support independent development"
+            ) {
+                val paymentUri = Uri.Builder()
+                    .scheme("upi")
+                    .authority("pay")
+                    .appendQueryParameter(
+                        "pa",
+                        "maheshmadhav620@okhdfcbank"
+                    )
+                    .appendQueryParameter(
+                        "pn",
+                        "HUMBLE MUSIC"
+                    )
+                    .appendQueryParameter(
+                        "tn",
+                        "Support HUMBLE MUSIC"
+                    )
+                    .appendQueryParameter(
+                        "cu",
+                        "INR"
+                    )
+                    .build()
+
+                val paymentIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    paymentUri
+                )
+
+                try {
+                    context.startActivity(
+                        Intent.createChooser(
+                            paymentIntent,
+                            "Support HUMBLE MUSIC"
+                        )
+                    )
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(
+                        context,
+                        "No UPI payment app found.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+            // Extensions
+            val extRegistry by
+            com.music.spotui.extensions.Extensions.registry.collectAsState()
+
             val installed = extRegistry.extensions
+
             SheetRow(
                 stringResource(R.string.extensions_title),
                 if (installed.isEmpty()) {
@@ -191,17 +297,15 @@ internal fun ImmersiveProfileSheet(
                 onOpen(Routes.Extensions.route)
             }
 
-            var about by remember { mutableStateOf(false) }
-            if (about) AboutSheet(onDismiss = { about = false })
-            SheetRow(
-                stringResource(R.string.creator_biography_section_title),
-                stringResource(R.string.about_detail)
-            ) {
-                about = true
+            // Supporter Perks
+            var perks by remember { mutableStateOf(false) }
+
+            if (perks) {
+                SupporterSheet(
+                    onDismiss = { perks = false }
+                )
             }
 
-            var perks by remember { mutableStateOf(false) }
-            if (perks) SupporterSheet(onDismiss = { perks = false })
             if (SupportReminder.PERKS_ENABLED) {
                 SheetRow(
                     stringResource(R.string.supporter_perks_title),
@@ -211,7 +315,11 @@ internal fun ImmersiveProfileSheet(
                 }
             }
 
-            SheetRow(stringResource(R.string.connect_device_menu_logout), null) {
+            // Logout
+            SheetRow(
+                stringResource(R.string.connect_device_menu_logout),
+                null
+            ) {
                 onDismiss()
                 SessionActions.logout(Graph.app)
             }
@@ -229,13 +337,25 @@ private fun SheetRow(
     Column(
         Modifier
             .fillMaxWidth()
-            .clickable(role = Role.Button, onClick = onClick)
+            .clickable(
+                role = Role.Button,
+                onClick = onClick
+            )
             .padding(
                 horizontal = Immersive.Gutter,
                 vertical = if (detail == null) 14.dp else 10.dp
             ),
     ) {
-        Text(title, style = Immersive.Body.copy(color = titleColor))
-        if (detail != null) Text(detail, style = Immersive.Caption)
+        Text(
+            title,
+            style = Immersive.Body.copy(color = titleColor)
+        )
+
+        if (detail != null) {
+            Text(
+                detail,
+                style = Immersive.Caption
+            )
+        }
     }
 }

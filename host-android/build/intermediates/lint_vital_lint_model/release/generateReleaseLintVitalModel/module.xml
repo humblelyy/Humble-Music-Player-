@@ -1,0 +1,20 @@
+<lint-module
+    format="1"
+    dir="C:\Users\mahes\Downloads\APK\HUMBLE_MUSIC_Android_Studio_Project\base\host-android"
+    name=":host-android"
+    type="LIBRARY"
+    maven="HUMBLE MUSIC:host-android:unspecified"
+    agpVersion="9.4.1"
+    buildFolder="build"
+    bootClassPath="C:\Users\mahes\AppData\Local\Android\Sdk\platforms\android-37.0\android.jar;C:\Users\mahes\AppData\Local\Android\Sdk\build-tools\36.0.0\core-lambda-stubs.jar"
+    javaSourceLevel="17"
+    compileTarget="android-37.0"
+    neverShrinking="true"
+    highlightGradualR8Api="false">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

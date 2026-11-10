@@ -19,7 +19,7 @@ android {
     compileSdk = 37
 
     // Two channels that install side by side.
-    val version = (findProperty("appVersionName") as String?) ?: "2.3.0"
+    val version = (findProperty("appVersionName") as String?) ?: "2.3.1"
     val beta = findProperty("appVersionName") == null || version.contains("-beta")
 
     defaultConfig {
@@ -31,7 +31,7 @@ android {
         targetSdk = 36
 
         versionCode =
-            (findProperty("appVersionCode") as String?)?.toIntOrNull() ?: 200
+            (findProperty("appVersionCode") as String?)?.toIntOrNull() ?: 201
         versionName = version
 
         buildConfigField(

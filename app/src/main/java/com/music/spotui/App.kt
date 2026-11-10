@@ -227,9 +227,13 @@ private fun SupportDialog(supporter: Boolean, onSupport: () -> Unit, onSponsor: 
                 .padding(horizontal = 24.dp, vertical = 28.dp),
         ) {
             androidx.compose.foundation.Image(
-                painter = androidx.compose.ui.res.painterResource(app.myspoti.engine.R.drawable.ic_launcher_foreground),
+                painter = androidx.compose.ui.res.painterResource(
+                    app.myspoti.engine.R.drawable.humble_main_logo
+                ),
                 contentDescription = null,
-                modifier = Modifier.size(72.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
+                modifier = Modifier
+                    .size(72.dp)
+                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
                     .background(tone(0xFF181818)),
             )
             androidx.compose.material3.Text(
@@ -378,7 +382,7 @@ private fun UpdateDialog(
                 .padding(horizontal = 24.dp, vertical = 28.dp),
         ) {
             androidx.compose.foundation.Image(
-                painter = androidx.compose.ui.res.painterResource(app.myspoti.engine.R.drawable.ic_launcher_foreground),
+                painter = androidx.compose.ui.res.painterResource(app.myspoti.engine.R.drawable.humble_main_logo),
                 contentDescription = null,
                 modifier = Modifier.size(72.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
                     .background(tone(0xFF181818)),

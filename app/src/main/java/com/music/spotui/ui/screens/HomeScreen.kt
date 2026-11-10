@@ -480,88 +480,267 @@ private fun HomeFeedCard(item: HomeItem, onClick: () -> Unit) {
 }
 
 /** Profile sheet behind the avatar: account name and sign-out (in the Web Player). */
-@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
+
+/** Classic UI profile sheet. */
+@OptIn(
+    androidx.compose.material3.ExperimentalMaterial3Api::class,
+    ExperimentalGlideComposeApi::class
+)
 @Composable
-private fun ProfileSheet(onOpen: (route: String) -> Unit = {}, onDismiss: () -> Unit) {
+private fun ProfileSheet(
+    onOpen: (route: String) -> Unit = {},
+    onDismiss: () -> Unit
+) {
     val name = com.music.spotui.data.api.ProfileCache.name.orEmpty()
     val avatar = com.music.spotui.data.api.ProfileCache.imageUrl
-    // Opened in full: half-open, the sheet and its list both moved under the finger.
-    androidx.compose.material3.ModalBottomSheet(onDismissRequest = onDismiss, containerColor = tone(0xFF282828),
-        sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+
+    androidx.compose.material3.ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = tone(0xFF282828),
+        sheetState = androidx.compose.material3.rememberModalBottomSheetState(
+            skipPartiallyExpanded = true
+        )
+    ) {
         androidx.compose.foundation.layout.Column(
-            modifier = Modifier.fillMaxWidth().then(Modifier.windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.navigationBars))
-                .verticalScroll(androidx.compose.foundation.rememberScrollState()).padding(bottom = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .windowInsetsPadding(
+                    androidx.compose.foundation.layout.WindowInsets.navigationBars
+                )
+                .verticalScroll(androidx.compose.foundation.rememberScrollState())
+                .padding(bottom = 16.dp)
         ) {
-            // Name and picture open your public profile, as in Spotify.
+            // Profile header
             val myId = com.music.spotui.data.api.ProfileCache.id
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()
-                .clickable(enabled = myId != null) { myId?.let { onOpen(com.music.spotui.ui.navigation.profileRoute(it, name)) } }
-                .padding(horizontal = 20.dp, vertical = 8.dp)) {
-                com.music.spotui.ui.components.ProfileAvatar(url = avatar, name = name, size = 48.dp)
-                Text(name.ifBlank { stringResource(R.string.spotify_account) }, color = AppText, fontSize = 18.sp, fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 14.dp))
-                if (com.music.spotui.data.api.SupportReminder.level != com.music.spotui.data.api.SupportReminder.Level.NONE)
-                    com.music.spotui.ui.components.SupporterBadge(Modifier.padding(start = 10.dp))
-            }
-            if (myId != null) Text(stringResource(R.string.view_profile), color = AppMuted, fontSize = 13.sp,
-                modifier = Modifier.padding(start = 82.dp, bottom = 4.dp))
-            androidx.compose.material3.HorizontalDivider(color = tone(0xFF3E3E3E), modifier = Modifier.padding(vertical = 8.dp))
-            // Sound quality, downloads, data, battery, display: one page.
-            androidx.compose.foundation.layout.Column(
-                Modifier.fillMaxWidth().clickable { onOpen(com.music.spotui.ui.navigation.Routes.Settings.route) }
-                    .padding(horizontal = 20.dp, vertical = 10.dp),
-            ) {
-                Text(stringResource(R.string.settings_title), color = AppText, fontSize = 16.sp)
-                Text(stringResource(R.string.settings_detail), color = AppMuted, fontSize = 12.sp)
-            }
-            val extRegistry by com.music.spotui.extensions.Extensions.registry.collectAsState()
+
             Row(
-                Modifier.fillMaxWidth().clickable { onOpen(com.music.spotui.ui.navigation.Routes.Extensions.route) }
-                    .padding(horizontal = 20.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(enabled = myId != null) {
+                        myId?.let {
+                            onOpen(
+                                com.music.spotui.ui.navigation.profileRoute(it, name)
+                            )
+                        }
+                    }
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
             ) {
-                androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
-                    Text(stringResource(R.string.extensions_title), color = AppText, fontSize = 16.sp)
-                    val installed = extRegistry.extensions
-                    Text(
-                        if (installed.isEmpty()) stringResource(R.string.extensions_row_detail)
-                        else stringResource(R.string.extensions_row_count, installed.size, installed.count { it.enabled }),
-                        color = AppMuted, fontSize = 12.sp,
+                com.music.spotui.ui.components.ProfileAvatar(
+                    url = avatar,
+                    name = name,
+                    size = 48.dp
+                )
+
+                Text(
+                    name.ifBlank { stringResource(R.string.spotify_account) },
+                    color = AppText,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 14.dp)
+                )
+
+                if (
+                    com.music.spotui.data.api.SupportReminder.level !=
+                    com.music.spotui.data.api.SupportReminder.Level.NONE
+                ) {
+                    com.music.spotui.ui.components.SupporterBadge(
+                        Modifier.padding(start = 10.dp)
                     )
                 }
-                androidx.compose.material3.Icon(Icons.Filled.Extension, null, tint = AppMuted,
-                    modifier = Modifier.padding(start = 12.dp).size(22.dp))
             }
-            val ctx = androidx.compose.ui.platform.LocalContext.current
-            // Donations (Ko-fi or GitHub Sponsors): always here, never in the way.
 
-            // About: version, Discord, source code and Ko-fi.
-            var about by remember { androidx.compose.runtime.mutableStateOf(false) }
-            if (about) com.music.spotui.ui.components.AboutSheet(onDismiss = { about = false })
+            if (myId != null) {
+                Text(
+                    stringResource(R.string.view_profile),
+                    color = AppMuted,
+                    fontSize = 13.sp,
+                    modifier = Modifier.padding(start = 82.dp, bottom = 4.dp)
+                )
+            }
+
+            androidx.compose.material3.HorizontalDivider(
+                color = tone(0xFF3E3E3E),
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+
+            // 1. Settings
             androidx.compose.foundation.layout.Column(
-                Modifier.fillMaxWidth().clickable { about = true }.padding(horizontal = 20.dp, vertical = 10.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onOpen(
+                            com.music.spotui.ui.navigation.Routes.Settings.route
+                        )
+                    }
+                    .padding(horizontal = 20.dp, vertical = 10.dp)
             ) {
-                Text(stringResource(R.string.creator_biography_section_title), color = AppText, fontSize = 16.sp)
-                Text(stringResource(R.string.about_detail), color = AppMuted, fontSize = 12.sp)
+                Text(
+                    stringResource(R.string.settings_title),
+                    color = AppText,
+                    fontSize = 16.sp
+                )
+                Text(
+                    stringResource(R.string.settings_detail),
+                    color = AppMuted,
+                    fontSize = 12.sp
+                )
             }
-            var perks by remember { androidx.compose.runtime.mutableStateOf(false) }
-            if (perks) com.music.spotui.ui.components.SupporterSheet(onDismiss = { perks = false })
-            if (com.music.spotui.data.api.SupportReminder.PERKS_ENABLED) androidx.compose.foundation.layout.Column(
-                Modifier.fillMaxWidth().clickable { perks = true }.padding(horizontal = 20.dp, vertical = 10.dp),
+
+            // 2. About
+            var about by remember {
+                androidx.compose.runtime.mutableStateOf(false)
+            }
+
+            if (about) {
+                com.music.spotui.ui.components.AboutSheet(
+                    onDismiss = { about = false }
+                )
+            }
+
+            androidx.compose.foundation.layout.Column(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { about = true }
+                    .padding(horizontal = 20.dp, vertical = 10.dp)
             ) {
-                Text(stringResource(R.string.supporter_perks_title), color = AppText, fontSize = 16.sp)
-                Text(stringResource(R.string.supporter_perks_detail), color = AppMuted, fontSize = 12.sp)
+                Text(
+                    stringResource(R.string.creator_biography_section_title),
+                    color = AppText,
+                    fontSize = 16.sp
+                )
+                Text(
+                    stringResource(R.string.about_detail),
+                    color = AppMuted,
+                    fontSize = 12.sp
+                )
             }
+
+            // 3. Support Humble Music
+            androidx.compose.foundation.layout.Column(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        val paymentUri = android.net.Uri.Builder()
+                            .scheme("upi")
+                            .authority("pay")
+                            .appendQueryParameter(
+                                "pa",
+                                "maheshmadhav620@okhdfcbank"
+                            )
+                            .appendQueryParameter(
+                                "pn",
+                                "HUMBLE MUSIC"
+                            )
+                            .appendQueryParameter(
+                                "tn",
+                                "Support HUMBLE MUSIC"
+                            )
+                            .appendQueryParameter("cu", "INR")
+                            .build()
+
+                        val paymentIntent = android.content.Intent(
+                            android.content.Intent.ACTION_VIEW,
+                            paymentUri
+                        )
+
+                        try {
+                            ctx.startActivity(
+                                android.content.Intent.createChooser(
+                                    paymentIntent,
+                                    "Support Humble Music"
+                                )
+                            )
+                        } catch (
+                            e: android.content.ActivityNotFoundException
+                        ) {
+                            android.widget.Toast.makeText(
+                                ctx,
+                                "No UPI payment app found.",
+                                android.widget.Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                    .padding(horizontal = 20.dp, vertical = 10.dp)
+            ) {
+                Text(
+                    "Support Humble Music",
+                    color = AppText,
+                    fontSize = 16.sp
+                )
+                Text(
+                    "Support the development of HUMBLE MUSIC",
+                    color = AppMuted,
+                    fontSize = 12.sp
+                )
+            }
+
+            // 4. Extensions
+            val extRegistry by
+            com.music.spotui.extensions.Extensions.registry.collectAsState()
+
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onOpen(
+                            com.music.spotui.ui.navigation.Routes.Extensions.route
+                        )
+                    }
+                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                androidx.compose.foundation.layout.Column(
+                    Modifier.weight(1f)
+                ) {
+                    Text(
+                        stringResource(R.string.extensions_title),
+                        color = AppText,
+                        fontSize = 16.sp
+                    )
+
+                    val installed = extRegistry.extensions
+
+                    Text(
+                        if (installed.isEmpty()) {
+                            stringResource(R.string.extensions_row_detail)
+                        } else {
+                            stringResource(
+                                R.string.extensions_row_count,
+                                installed.size,
+                                installed.count { it.enabled }
+                            )
+                        },
+                        color = AppMuted,
+                        fontSize = 12.sp
+                    )
+                }
+
+                androidx.compose.material3.Icon(
+                    Icons.Filled.Extension,
+                    null,
+                    tint = AppMuted,
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .size(22.dp)
+                )
+            }
+
+            // 5. Log out
             Text(
                 stringResource(R.string.connect_device_menu_logout),
-                color = AppText, fontSize = 16.sp,
+                color = AppText,
+                fontSize = 16.sp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
                         onDismiss()
-                        com.music.spotui.di.SessionActions.logout(com.music.spotui.di.Graph.app)
+                        com.music.spotui.di.SessionActions.logout(
+                            com.music.spotui.di.Graph.app
+                        )
                     }
-                    .padding(horizontal = 20.dp, vertical = 14.dp),
+                    .padding(horizontal = 20.dp, vertical = 14.dp)
             )
         }
     }

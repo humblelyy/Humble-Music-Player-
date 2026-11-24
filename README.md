@@ -1,7 +1,7 @@
 # 🎧 HUMBLE MUSIC
 
 <p align="center">
-  <img src="public/assets/logo.png" width="150" alt="HUMBLE MUSIC Logo">
+  <img src="assets/logo.jpeg" width="150" alt="HUMBLE MUSIC Logo">
 </p>
 
 <h1 align="center">HUMBLE MUSIC</h1>
@@ -22,8 +22,8 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Platform-Android-8BAA63?style=flat-square">
-  <img src="https://img.shields.io/badge/Version-2.3.1-black?style=flat-square">
-  <img src="https://img.shields.io/badge/Developer-HUMBLE%20STUDIO-black?style=flat-square">
+  <img src="https://img.shields.io/badge/Version-2.3.1-black?style=flat-square"> <br>
+  <img src="https://img.shields.io/badge/Developer-HUMBLE%20Studio-black?style=flat-square">
 </p>
 
 ---
@@ -66,15 +66,15 @@ A custom-designed interface with its own visual identity, built around the HUMBL
 ### Classic UI & HUMBLE UI
 
 <p align="center">
-  <img src="public/assets/classic-home.png" width="48%" alt="Classic UI Home">
-  <img src="public/assets/humble-home.png" width="48%" alt="HUMBLE UI Home">
+  <img src="public/assets/classic-home.jpeg" width="48%" alt="Classic UI Home">
+  <img src="public/assets/humble-home.jpeg" width="48%" alt="HUMBLE UI Home">
 </p>
 
 ### Music Player & Library
 
 <p align="center">
-  <img src="public/assets/player.png" width="48%" alt="Music Player">
-  <img src="public/assets/library.png" width="48%" alt="Music Library">
+  <img src="public/assets/classic-player.jpeg" width="48%" alt="Classic Music Player">
+  <img src="public/assets/humble-player.jpeg" width="48%" alt="Humble Music Library">
 </p>
 
 ---

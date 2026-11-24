@@ -163,7 +163,7 @@ class WebPlayerHost(private val context: Context) : BridgeHost {
             javaScriptEnabled = true
             domStorageEnabled = true
             mediaPlaybackRequiresUserGesture = false
-            userAgentString = fingerprint.userAgent
+            // userAgentString = fingerprint.userAgent
             cacheMode = WebSettings.LOAD_DEFAULT
             loadWithOverviewMode = true
             useWideViewPort = true
@@ -351,17 +351,38 @@ class WebPlayerHost(private val context: Context) : BridgeHost {
                 }
             }
 
-            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                val host = request.url.host.orEmpty()
-                // Stay on Spotify's own pages (player, login, consent); open nothing else.
-                // Exact or subdomain match: "evilspotify.com" must not count as Spotify.
-                val allowed = listOf("spotify.com", "spotify.net", "scdn.co", "google.com", "facebook.com", "apple.com")
-                    .any { host == it || host.endsWith(".$it") }
-                // And only over https: a plain http link to those hosts, or any other scheme, stays out.
-                // The page's own loads (loadUrl, about:blank) do not come through here.
-                val secure = request.url.scheme == "https"
-                // A sign-in step that goes nowhere looks like a page that does nothing: say which host was refused.
-                if (!allowed || !secure) Logbook.log("navigation refused: ${host.ifEmpty { request.url.scheme.orEmpty() }}${if (allowed && !secure) " (${request.url.scheme}, not https)" else ""}")
+            override fun shouldOverrideUrlLoading(
+                view: WebView,
+                request: WebResourceRequest
+            ): Boolean {
+                val url = request.url
+                val host = url.host.orEmpty()
+                val scheme = url.scheme.orEmpty()
+
+                // Allow Spotify and its required login providers inside WebView.
+                val allowedHosts = listOf(
+                    "spotify.com",
+                    "spotify.net",
+                    "scdn.co",
+                    "google.com",
+                    "googleusercontent.com",
+                    "gstatic.com",
+                    "facebook.com",
+                    "apple.com"
+                )
+
+                val allowed = allowedHosts.any {
+                    host == it || host.endsWith(".$it")
+                }
+
+                val secure = scheme == "https"
+
+                if (!allowed || !secure) {
+                    Logbook.log(
+                        "navigation refused: ${host.ifEmpty { scheme }}"
+                    )
+                }
+
                 return !(allowed && secure)
             }
 
@@ -591,11 +612,18 @@ class WebPlayerHost(private val context: Context) : BridgeHost {
     private fun beginLoginLoad() {
         loginProbes = 0
         loginReloaded = false
+
         main.removeCallbacks(loginProbe)
         main.removeCallbacks(loginTimeout)
+
         _loginLoad.value = LoginLoad.LOADING
-        view.alpha = 0f
+
+        // Keep Spotify login visible while it loads.
+        view.alpha = 1f
+        view.visibility = View.VISIBLE
+
         main.postDelayed(loginTimeout, LoginLoad.TIMEOUT_MS)
+
         Logbook.log("sign-in page: opening")
     }
 
@@ -686,7 +714,7 @@ class WebPlayerHost(private val context: Context) : BridgeHost {
         container.addView(view, ViewGroup.LayoutParams(size, size))
         keepClearOfSystemBars(visible)
         // Still opening or failed, the sign-in page stays out of sight (the app's own screen covers it).
-        view.alpha = if (_loginLoad.value == LoginLoad.LOADING || _loginLoad.value == LoginLoad.FAILED) 0f else 1f
+        view.alpha = 1f
         view.visibility = if (visible) View.VISIBLE else View.INVISIBLE
         view.importantForAccessibility = if (visible) View.IMPORTANT_FOR_ACCESSIBILITY_AUTO else View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
         // Typing in the login form needs touch focus, or the keyboard never opens.
